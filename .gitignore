@@ -1,0 +1,6 @@
+$ cat .gitignore
+
+.ipynb_checkpoints
+__pycache__
+*.png
+Tests_propres_tim_ancien.ipynb

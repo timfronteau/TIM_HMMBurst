@@ -2,7 +2,8 @@ $ cat .gitignore
 
 .ipynb_checkpoints
 __pycache__
+_Old
 *.png
 *.csv
 *.mat
-Tests_propres_tim_ancien.ipynb
+

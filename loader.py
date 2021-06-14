@@ -6,7 +6,7 @@ from wavelet_transform import wavelet_transform
 # import xarray as xr
 # from utilities import flatten_dict
 
-def load(directory, file, tfr=None, csvdirectory=None, csvfile=None):
+def load(directory, file, tfr="Comp256Hz", csvdirectory=None, csvfile=None):
     path = f"{directory}/{file}"
     
     mat_file = h5py.File(path, "r")
@@ -30,18 +30,18 @@ def load(directory, file, tfr=None, csvdirectory=None, csvfile=None):
     
     info = mne.create_info(ch_names=['signal'], sfreq=256, ch_types=['eeg'])
 
-#     print("Computing and loading the time-frequency wavelet transformation of the 1st trial for all subjects, all IC...")
-#     for IC in range(1, n_IC+1):
-#         for subj in range(1, n_subj+1):
-#             try:
-#                 data[f'tfr_256Hz subject{subj}, IC{IC}, trial1'] = wavelet_transform(data, info, subj, IC, 1)
-#             except:
-#                 pass
+    print("Computing and loading the time-frequency wavelet transformation of the 1st trial for all subjects, all IC...")
+    for IC in range(1, n_IC+1):
+        for subj in range(1, n_subj+1):
+            try:
+                data[f'tfr_256Hz subject{subj}, IC{IC}, trial1'] = wavelet_transform(data, info, subj, IC, 1)
+            except:
+                pass
     
     if tfr=="Comp256Hz":
-        print("Computing and loading the time-frequency wavelet transformation of the 2nd subject for all IC, all trials...")
+        print("Computing and loading the time-frequency wavelet transformation of the 2nd subject for all IC, 102 trials...")
         for IC in range(1, n_IC+1):
-            for trial in range(1, 50):
+            for trial in range(1, 102):
                 try:
                     data[f'tfr_256Hz subject2, IC{IC}, trial{trial}'] = wavelet_transform(data, info, 2, IC, trial)
                 except:

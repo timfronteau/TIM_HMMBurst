@@ -1,4 +1,4 @@
-satimport numpy as np
+import numpy as np
 import mne
 
 def wavelet_transform (data, info=None, subj=1, IC=1, trial=1):

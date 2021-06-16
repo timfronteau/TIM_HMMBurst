@@ -39,14 +39,15 @@ def load(directory, file, tfr="Comp256Hz", csvdirectory=None, csvfile=None):
                 pass
     
     if tfr=="Comp256Hz":
-        print("Computing and loading the time-frequency wavelet transformation of the 2nd subject for all IC, 102 trials...")
-        for IC in range(1, n_IC+1):
-            for trial in range(1, 102):
-                try:
-                    data[f'tfr_256Hz subject2, IC{IC}, trial{trial}'] = wavelet_transform(data, info, 2, IC, trial)
-                except:
-                    pass
-        print("Loaded")
+        print("Computing and loading the time-frequency wavelet transformation of all subjects for all IC, 22 trials...")
+        for subj in range(1, n_subj+1):
+            for IC in range(1, n_IC+1):
+                for trial in range(1, 12):
+                    try:
+                        data[f'tfr_256Hz subject{subj}, IC{IC}, trial{trial}'] = wavelet_transform(data, info, subj, IC, trial)
+                    except:
+                        pass
+            print(f"Loaded subject {subj}")
         
     if tfr=="mat20Hz":
         print("Loading the time-frequency wavelet transformation of the 2nd subject from the .mat file")

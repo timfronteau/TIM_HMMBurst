@@ -7,3 +7,4 @@ _Old
 *.csv
 *.mat
 *.pkl
+*.nc

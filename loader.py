@@ -1,7 +1,7 @@
 import h5py
 import numpy as np
 import mne
-from wavelet_transform import wavelet_transform
+from wavelet_transform import *
 
 # import xarray as xr
 # from utilities import flatten_dict
@@ -29,20 +29,12 @@ def load(directory, file, tfr="Comp256Hz", csvdirectory=None, csvfile=None):
     data['time_axis'] = _load_time_256Hz(mat_file, cells_refs, 0, 0)
     
     info = mne.create_info(ch_names=['signal'], sfreq=256, ch_types=['eeg'])
-
-    print("Computing and loading the time-frequency wavelet transformation of the 1st trial for all subjects, all IC...")
-    for IC in range(1, n_IC+1):
-        for subj in range(1, n_subj+1):
-            try:
-                data[f'tfr_256Hz subject{subj}, IC{IC}, trial1'] = wavelet_transform(data, info, subj, IC, 1)
-            except:
-                pass
     
     if tfr=="Comp256Hz":
         print("Computing and loading the time-frequency wavelet transformation of all subjects for all IC, 22 trials...")
         for subj in range(1, n_subj+1):
             for IC in range(1, n_IC+1):
-                for trial in range(1, 12):
+                for trial in range(1, 22):
                     try:
                         data[f'tfr_256Hz subject{subj}, IC{IC}, trial{trial}'] = wavelet_transform(data, info, subj, IC, trial)
                     except:
@@ -77,49 +69,31 @@ def load(directory, file, tfr="Comp256Hz", csvdirectory=None, csvfile=None):
         print("Loaded")
             
     return data, n_IC, n_subj, n_trials
-   
-# def load2(matdirectory, matfile, csvdirectory, csvfile): # Future function to load .mat AND .csv file data
-#     matpath = f"{matdirectory}/{matfile}"
-    
-#     mat_file = h5py.File(matpath, "r")
-#     cells_refs = mat_file['FCK_LOCKED_IC_JYOTIKA']
-#     n_IC, n_subj = cells_refs.shape
-    
-#     csvpath = f"{csvdirectory}/{csvfile}"
-    
-#     # TRUC TRUC TRUC
-    
-#     data = {}
-    
-#     print("loading the raw timecourses...")
-#     for IC in range(n_IC):
-#         for subj in range(n_subj):
-#             try:
-#                 data[f'raw_timecourse_256Hz subject{subj+1}, IC{IC+1}'] = _load_raw_timecourse_256Hz(mat_file, cells_refs, IC, subj)
-#             except:
-#                 print(f'The independent component IC{IC+1} of the subject {subj+1} is not in the .mat file.')
 
-#     n_trials = data['raw_timecourse_256Hz subject2, IC1'].shape[0]
+def load_oneIC(mat_file, cells_refs, subj=2, IC=1):
+
+    data = {}
     
-#     data['freq_axis'] = _load_freq(mat_file, cells_refs, 0, 0)
-#     data['time_axis'] = _load_time_256Hz(mat_file, cells_refs, 0, 0)
-    
-#     freq = data['freq_axis'].shape[0]
-#     time = data['time_axis'].shape[0]
-    
-#     print("Computing and loading the time-frequency wavelet transformation of the 2nd subject for all IC, all trials...")
-#     for IC in range(1, n_IC+1):
-#         for trial in range(1, 50):
-#             try:
-#                 tfr = np.zeros(1, freq, time)
-# #                 for f in range(freq):
-# #                     tfr[1, f] = # lire la ligne d'indice f'tfr_256Hz subject2, IC{IC}, trial{trial}, f_ind{f}' dans le csv
-#                 data[f'tfr_256Hz subject2, IC{IC}, trial{trial}'] = tfr
-#             except:
-#                 pass
-#     print("Loaded")
+    try:
+        print("Loading the raw timecourse")
+        data[f'raw_timecourse_256Hz'] = _load_raw_timecourse_256Hz(mat_file, cells_refs, IC-1, subj-1)
         
-#     return data, n_IC, n_subj, n_trials
+        n_trials = data[f'raw_timecourse_256Hz'].shape[0]
+    
+        data['freq_axis'] = _load_freq(mat_file, cells_refs, IC-1, subj-1)
+        data['time_axis'] = _load_time_256Hz(mat_file, cells_refs, IC-1, subj-1)
+
+        info = mne.create_info(ch_names=['signal'], sfreq=256, ch_types=['eeg'])
+
+        print(f"Computing and loading the time-frequency wavelet transformation for 3 trials")
+        for trial in range(1, 4):
+            data[f'tfr_256Hz trial{trial}'] = wavelet_transform2(data, info, trial)
+
+    except:
+        print(f'The independent component IC{IC} of the subject {subj} is not in the .mat file.')
+        raise
+
+    return data, n_trials
     
 
 def _load_raw_timecourse_256Hz(mat_file, cells_refs, IC, subj):

@@ -70,7 +70,7 @@ def load(directory, file, tfr="Comp256Hz", csvdirectory=None, csvfile=None):
             
     return data, n_IC, n_subj, n_trials
 
-def load_oneIC(mat_file, cells_refs, subj=2, IC=1):
+def load_oneIC(mat_file, cells_refs, subj=2, IC=1, comp=True):
 
     data = {}
     
@@ -85,9 +85,10 @@ def load_oneIC(mat_file, cells_refs, subj=2, IC=1):
 
         info = mne.create_info(ch_names=['signal'], sfreq=256, ch_types=['eeg'])
 
-        print(f"Computing and loading the time-frequency wavelet transformation for 3 trials")
-        for trial in range(1, 4):
-            data[f'tfr_256Hz trial{trial}'] = wavelet_transform2(data, info, trial)
+        if comp=True:
+            print(f"Computing and loading the time-frequency wavelet transformation for 3 trials")
+            for trial in range(1, 4):
+                data[f'tfr_256Hz trial{trial}'] = wavelet_transform2(data, info, trial)
 
     except:
         print(f'The independent component IC{IC} of the subject {subj} is not in the .mat file.')

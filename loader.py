@@ -85,7 +85,7 @@ def load_oneIC(mat_file, cells_refs, subj=2, IC=1, comp=True):
 
         info = mne.create_info(ch_names=['signal'], sfreq=256, ch_types=['eeg'])
 
-        if comp=True:
+        if comp==True:
             print(f"Computing and loading the time-frequency wavelet transformation for 3 trials")
             for trial in range(1, 4):
                 data[f'tfr_256Hz trial{trial}'] = wavelet_transform2(data, info, trial)

@@ -1,5 +1,6 @@
 $ cat .gitignore
 
+.idea
 .ipynb_checkpoints
 __pycache__
 _Old
@@ -11,3 +12,4 @@ _Old
 *.pptx
 *.pdf
 *.zip
+

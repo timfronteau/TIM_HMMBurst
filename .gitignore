@@ -1,8 +1,10 @@
 $ cat .gitignore
 
+.idea
 .ipynb_checkpoints
 __pycache__
 _Old
+venv
 *.png
 *.csv
 *.mat
@@ -10,3 +12,5 @@ _Old
 *.nc
 *.pptx
 *.pdf
+*.zip
+

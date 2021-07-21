@@ -1,0 +1,14 @@
+lags = np.arange(-5, 5) i.e. [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4]  #Time-delay embedding
+n_components = 0 (there is no PCA applied)     # For the principal component analysis
+n_states = 3 to 6    # for the Hidden Markov Model
+
+covariance_type = 'full'    # Type of the inferred covariance matrix : (delays*IC)² params are inferred
+model_type = 'GaussianHMM'  # Observation model (here, a means-array and a covariance-matrix is 								inferred)
+n_iter=100
+tol=0.01
+downsamp_rate = 3
+
+|_ (10delays x 4IC)  x ( 7s x 256/3 Hz x N_subj trials )
+            -------------> TDE-HMM ( 1 Gaussian obs. model per state, 3 to 6 states )
+
+Randomly initialising the HMM parameters (states probability for the first sample of the timecourse, transition matrix, means array and covariance matrix)
